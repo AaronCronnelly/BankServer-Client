@@ -9,10 +9,14 @@ public class ServerThread extends Thread {
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	String message;
+	//data
+	String name,email,password,address,PPS;
+	double balance;
 
 	public ServerThread(Socket s) {
 		myConnection = s;
 	}
+	
 
 	public void run() {
 		try {
@@ -29,11 +33,22 @@ public class ServerThread extends Thread {
 				/*
 				 * If the user choose sign in then they are going to be asked to
 				 */
+//				sendMessage("Testing entry");
+//				message=(String)in.readObject();
+//				entry=Integer.parseInt(message);
+//				sendMessage("Testing number: "+entry);
+				sendMessage("Welcome to sign in");
+				sendMessage("Enter Name: ");
+				name=(String)in.readObject();
+				sendMessage("Enter Password: ");
+				password=(String)in.readObject();
+				sendMessage("Signing in");
 
 			}
 
 			else if (message.equalsIgnoreCase("2")) {// When the user registers they will be brought straigt to the menu
-
+				//Registering
+				
 			}
 
 			in.close();
