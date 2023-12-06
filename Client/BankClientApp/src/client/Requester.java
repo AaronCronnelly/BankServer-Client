@@ -16,6 +16,97 @@ public class Requester {
 
 		input = new Scanner(System.in);
 	}
+/***Methods***/
+	void handleSignIn() throws ClassNotFoundException, IOException {
+		// welcome
+		message = (String) in.readObject();
+		System.out.println(message);
+		// name
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+		// password
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+
+	}
+
+	void handleRegistration() throws ClassNotFoundException, IOException {
+		// welcome
+		message = (String) in.readObject();
+		System.out.println(message);
+		// name
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+		// email
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+		// password
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+		// passwordCheck
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+		// PPS No.
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+		// balance
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+		// address
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
+		sendMessage(response);
+	}
+	
+	void menu() throws ClassNotFoundException, IOException {
+//		sendMessage("Menu:");
+//		sendMessage("1. Lodge Money");
+//		sendMessage("2. Retrieve All Registered Users");
+//		sendMessage("3. Transfer Money");
+//		sendMessage("4. View Transaction History");
+//		sendMessage("5. Update Password");
+//		sendMessage("6. Exit");
+//
+//		sendMessage("Enter your choice (1-6): ");
+//		String choice = (String) in.readObject();
+		//menu
+		message = (String) in.readObject();
+		System.out.println(message);
+		message = (String) in.readObject();
+		System.out.println(message);
+		message = (String) in.readObject();
+		System.out.println(message);
+		message = (String) in.readObject();
+		System.out.println(message);
+		message = (String) in.readObject();
+		System.out.println(message);
+		message = (String) in.readObject();
+		System.out.println(message);
+		message = (String) in.readObject();
+		System.out.println(message);message = (String) in.readObject();
+		System.out.println(message);
+		response=input.next();
+		sendMessage(response);
+		
+		
+	}
 
 	void run() {
 		try {
@@ -38,24 +129,12 @@ public class Requester {
 					sendMessage(response);
 
 					if (response.equalsIgnoreCase("1")) {
-						//welcome
-						message = (String) in.readObject();
-						System.out.println(message);
-						//name
-						message = (String) in.readObject();
-						System.out.println(message);
-						response = input.next();
-						sendMessage(response);
-						//password
-						message = (String) in.readObject();
-						System.out.println(message);
-						response = input.next();
-						sendMessage(response);
-
+						handleSignIn();
+						menu();
 					}
 
 					else if (response.equalsIgnoreCase("2")) {
-
+						handleRegistration();
 					}
 
 					message = (String) in.readObject();

@@ -9,14 +9,12 @@ public class ServerThread extends Thread {
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	String message;
-	//data
-	String name,email,password,address,PPS;
-	double balance;
+	// data
+	String name, email, password, passwordCheck, address, PPS, balance;
 
 	public ServerThread(Socket s) {
 		myConnection = s;
 	}
-	
 
 	public void run() {
 		try {
@@ -39,16 +37,34 @@ public class ServerThread extends Thread {
 //				sendMessage("Testing number: "+entry);
 				sendMessage("Welcome to sign in");
 				sendMessage("Enter Name: ");
-				name=(String)in.readObject();
+				name = (String) in.readObject();
 				sendMessage("Enter Password: ");
-				password=(String)in.readObject();
+				password = (String) in.readObject();
 				sendMessage("Signing in");
+
+				menu();
 
 			}
 
 			else if (message.equalsIgnoreCase("2")) {// When the user registers they will be brought straigt to the menu
-				//Registering
-				
+				// Registering
+				sendMessage("Wlecome to registeration");
+				sendMessage("Please enter Name:");
+				name = (String) in.readObject();
+				sendMessage("Please enter Email:");
+				email = (String) in.readObject();
+				sendMessage("Please enter Password:");
+				password = (String) in.readObject();
+				sendMessage("Please cofirm Password:");
+				passwordCheck = (String) in.readObject();
+				sendMessage("Please enter PPS NO.:");
+				PPS = (String) in.readObject();
+				sendMessage("Please enter Balance:");
+				balance = (String) in.readObject();
+				sendMessage("Please enter Address:");
+				address = (String) in.readObject();
+
+				menu();
 			}
 
 			in.close();
@@ -74,24 +90,79 @@ public class ServerThread extends Thread {
 	/****** METHODS ******/
 	/* Authentachation */
 //unsure if this method will be used yet have to wait and see
-	
+
 	/* Menu */
 //This is going to give the auth user the ability to acces other mehtods
-	
-	
+	public void menu() {
+		try {
+			sendMessage("Menu:");
+			sendMessage("1. Lodge Money");
+			sendMessage("2. Retrieve All Registered Users");
+			sendMessage("3. Transfer Money");
+			sendMessage("4. View Transaction History");
+			sendMessage("5. Update Password");
+			sendMessage("6. Exit");
+
+			sendMessage("Enter your choice (1-6): ");
+			String choice = (String) in.readObject();
+			// Handle user choice
+			sendMessage(choice);
+			int val = Integer.parseInt(choice);
+
+			switch (val) {
+			case 1:
+				lodgment();
+				break;
+			case 2:
+				retrive();
+				break;
+			case 3:
+				transfer();
+				break;
+			case 4:
+				transactionHistory();
+				break;
+			case 5:
+				updatePass();
+				break;
+
+			default:
+				break;
+			}
+
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	/* Lodgment */
 //Allows the user to lodge money into the account
-	
+	public void lodgment() throws ClassNotFoundException {
+		sendMessage("In lodgment");
+	}
+
 	/* Retrieve all registered users */
 //Allow the suer to see all registered users
-	
+	public void retrive() {
+		sendMessage("In retrive");
+	}
+
 	/* Transfer money */
 //Allow user to transfare money 
-	
+	public void transfer() {
+		sendMessage("In transfer");
+	}
+
 	/* View transaction history */
 //Allow user to view transaction history
-	
+	public void transactionHistory() {
+		sendMessage("In transaction history");
+	}
+
 	/* Update Password */
 //Allow user to update passowrd
+	public void updatePass() {
+		sendMessage("In update password");
+	}
 }
-
