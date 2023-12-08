@@ -16,7 +16,8 @@ public class Requester {
 
 		input = new Scanner(System.in);
 	}
-/***Methods***/
+
+	/*** Methods ***/
 	void handleSignIn() throws ClassNotFoundException, IOException {
 		// welcome
 		message = (String) in.readObject();
@@ -31,6 +32,8 @@ public class Requester {
 		System.out.println(message);
 		response = input.next();
 		sendMessage(response);
+
+		menu();
 
 	}
 
@@ -74,19 +77,9 @@ public class Requester {
 		response = input.next();
 		sendMessage(response);
 	}
-	
+
 	void menu() throws ClassNotFoundException, IOException {
-//		sendMessage("Menu:");
-//		sendMessage("1. Lodge Money");
-//		sendMessage("2. Retrieve All Registered Users");
-//		sendMessage("3. Transfer Money");
-//		sendMessage("4. View Transaction History");
-//		sendMessage("5. Update Password");
-//		sendMessage("6. Exit");
-//
-//		sendMessage("Enter your choice (1-6): ");
-//		String choice = (String) in.readObject();
-		//menu
+		// menu
 		message = (String) in.readObject();
 		System.out.println(message);
 		message = (String) in.readObject();
@@ -100,12 +93,15 @@ public class Requester {
 		message = (String) in.readObject();
 		System.out.println(message);
 		message = (String) in.readObject();
-		System.out.println(message);message = (String) in.readObject();
 		System.out.println(message);
-		response=input.next();
+		message = (String) in.readObject();
+		System.out.println(message);
+		response = input.next();
 		sendMessage(response);
-		
-		
+
+		message = (String) in.readObject();
+		System.err.println(message);
+
 	}
 
 	void run() {
@@ -130,7 +126,6 @@ public class Requester {
 
 					if (response.equalsIgnoreCase("1")) {
 						handleSignIn();
-						menu();
 					}
 
 					else if (response.equalsIgnoreCase("2")) {

@@ -1,20 +1,47 @@
 package server;
 
 import java.net.Socket;
-import java.io.*;
+import java.io.*; 
+import java.util.ArrayList;
 
-public class ServerThread extends Thread {
 
-	Socket myConnection;
+
+
+
+public class ServerThread extends Thread { 
+
+	Socket myConnection; 
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	String message;
 	// data
 	String name, email, password, passwordCheck, address, PPS, balance;
 
+	public class User {
+        String name;
+        String email;
+        String password;
+        String PPS;
+        String balance;
+        String address;
+
+        public User(String name, String email, String password, String PPS, String balance, String address) {
+            this.name = name;
+            this.email = email;
+            this.password = password;
+            this.PPS = PPS;
+            this.balance = balance;
+            this.address = address;
+        }
+    }
+
+	
 	public ServerThread(Socket s) {
 		myConnection = s;
 	}
+	
+	
+	 
 
 	public void run() {
 		try {
@@ -102,8 +129,6 @@ public class ServerThread extends Thread {
 			sendMessage("4. View Transaction History");
 			sendMessage("5. Update Password");
 			sendMessage("6. Exit");
-
-			sendMessage("Enter your choice (1-6): ");
 			String choice = (String) in.readObject();
 			// Handle user choice
 			sendMessage(choice);

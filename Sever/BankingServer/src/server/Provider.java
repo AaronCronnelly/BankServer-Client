@@ -1,11 +1,16 @@
 package server;
 import java.io.*;
+import java.util.ArrayList;
+
+import server.ServerThread.User;
+
 import java.net.*;
 public class Provider{
 	
 	
 	public static void main(String args[])
 	{
+		 ArrayList<User> userList = new ArrayList<>();
 		ServerSocket providerSocket;
 		try 
 		{
