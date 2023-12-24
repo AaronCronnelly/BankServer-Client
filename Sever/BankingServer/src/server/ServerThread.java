@@ -1,47 +1,29 @@
 package server;
 
+import server.userData;
 import java.net.Socket;
-import java.io.*; 
-import java.util.ArrayList;
+import java.util.List;
+import java.io.*;
 
+public class ServerThread extends Thread {
 
-
-
-
-public class ServerThread extends Thread { 
-
-	Socket myConnection; 
+	Socket myConnection;
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	String message;
-	// data
-	String name, email, password, passwordCheck, address, PPS, balance;
+	String message1;
+	String message2;
+	String message3;
+	String message4;
+	String message5;
+	String message6;
+	String message7;
+	userData userListData;
 
-	public class User {
-        String name;
-        String email;
-        String password;
-        String PPS;
-        String balance;
-        String address;
-
-        public User(String name, String email, String password, String PPS, String balance, String address) {
-            this.name = name;
-            this.email = email;
-            this.password = password;
-            this.PPS = PPS;
-            this.balance = balance;
-            this.address = address;
-        }
-    }
-
-	
 	public ServerThread(Socket s) {
 		myConnection = s;
+		userListData = userListData;
 	}
-	
-	
-	 
 
 	public void run() {
 		try {
@@ -64,9 +46,9 @@ public class ServerThread extends Thread {
 //				sendMessage("Testing number: "+entry);
 				sendMessage("Welcome to sign in");
 				sendMessage("Enter Name: ");
-				name = (String) in.readObject();
+				message1 = (String) in.readObject();
 				sendMessage("Enter Password: ");
-				password = (String) in.readObject();
+				message2 = (String) in.readObject();
 				sendMessage("Signing in");
 
 				menu();
@@ -77,19 +59,19 @@ public class ServerThread extends Thread {
 				// Registering
 				sendMessage("Wlecome to registeration");
 				sendMessage("Please enter Name:");
-				name = (String) in.readObject();
+				message1 = (String) in.readObject();
 				sendMessage("Please enter Email:");
-				email = (String) in.readObject();
+				message2= (String) in.readObject();
 				sendMessage("Please enter Password:");
-				password = (String) in.readObject();
+				 message3= (String) in.readObject();
 				sendMessage("Please cofirm Password:");
-				passwordCheck = (String) in.readObject();
+				message4 = (String) in.readObject();
 				sendMessage("Please enter PPS NO.:");
-				PPS = (String) in.readObject();
+				message5 = (String) in.readObject();
 				sendMessage("Please enter Balance:");
-				balance = (String) in.readObject();
+				message6 = (String) in.readObject();
 				sendMessage("Please enter Address:");
-				address = (String) in.readObject();
+				message7 = (String) in.readObject();
 
 				menu();
 			}

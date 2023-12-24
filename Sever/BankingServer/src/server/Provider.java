@@ -1,43 +1,36 @@
 package server;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-import server.ServerThread.User;
 
-import java.net.*;
-public class Provider{
-	
-	
-	public static void main(String args[])
-	{
-		 ArrayList<User> userList = new ArrayList<>();
+public class Provider {
+
+	public static void main(String args[]) {
 		ServerSocket providerSocket;
-		try 
-		{
+		userData myListData=new userData();
+		try {
 			providerSocket = new ServerSocket(2004, 10);
 			
-			while(true)
-			{
-			
-				//2. Wait for connection
+
+			while (true) {
+
+				// 2. Wait for connection
 				System.out.println("Waiting for connection");
-			
+
 				Socket connection = providerSocket.accept();
 				ServerThread T1 = new ServerThread(connection);
 				T1.start();
-			} 
-			
-			//providerSocket.close();
+			}
+
+			// providerSocket.close();
 		}
-		
-		catch (IOException e1) 
-		{
+
+		catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-			
-		
+
 	}
-	
+
 }
