@@ -26,7 +26,7 @@ public class userData {
 			BufferedReader bReader = new BufferedReader(fReader);
 
 			while ((line = bReader.readLine()) != null) {
-				StringTokenizer stringTokenizer = new StringTokenizer(line, "line");
+				StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
 
 				for (int i = 0; i < 7; i++) {
 					temp[i] = stringTokenizer.nextToken();
@@ -55,7 +55,9 @@ public class userData {
 			FileWriter frFileWriter=new FileWriter("UserData.txt",true);
 			BufferedWriter bufferedWriter=new BufferedWriter(frFileWriter);
 			lineString="Name: "+name+", Password: "+password+", PPS No.: "+PPS+", Email: "+email+", Address: "+address+", Balance: "+balance;
-			
+			bufferedWriter.write(lineString);
+			bufferedWriter.newLine();
+			bufferedWriter.close();
 		} catch (IOException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -64,9 +66,14 @@ public class userData {
 		
 	}// end of registorUser
 
-	public synchronized String logIn()
+	public synchronized boolean logIn(String email,String password)
 	{
-		
-	}
+		for(User user:newDatas) {
+			if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+				return true; // Return true if login succeeds
+	        }
+	    }
+	    return false; // Return false if login fails
+	}//end of logIn
 	
 }// end of class

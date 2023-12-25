@@ -37,43 +37,21 @@ public class ServerThread extends Thread {
 			message = (String) in.readObject();
 
 			if (message.equalsIgnoreCase("1")) {
-				/*
-				 * If the user choose sign in then they are going to be asked to
-				 */
-//				sendMessage("Testing entry");
-//				message=(String)in.readObject();
-//				entry=Integer.parseInt(message);
-//				sendMessage("Testing number: "+entry);
 				sendMessage("Welcome to sign in");
-				sendMessage("Enter Name: ");
+				sendMessage("Enter Email: ");
 				message1 = (String) in.readObject();
 				sendMessage("Enter Password: ");
 				message2 = (String) in.readObject();
-				sendMessage("Signing in");
 
-				menu();
-
+				if (userListData.logIn(message1, message2)) {
+					sendMessage("Login successful. Accessing menu...");
+					menu();
+				} else {
+					sendMessage("Login failed. Please try again.");
+				}
 			}
 
 			else if (message.equalsIgnoreCase("2")) {// When the user registers they will be brought straigt to the menu
-				// Registering
-				sendMessage("Wlecome to registeration");
-				sendMessage("Please enter Name:");
-				message1 = (String) in.readObject();
-				sendMessage("Please enter Email:");
-				message2= (String) in.readObject();
-				sendMessage("Please enter Password:");
-				 message3= (String) in.readObject();
-				sendMessage("Please cofirm Password:");
-				message4 = (String) in.readObject();
-				sendMessage("Please enter PPS NO.:");
-				message5 = (String) in.readObject();
-				sendMessage("Please enter Balance:");
-				message6 = (String) in.readObject();
-				sendMessage("Please enter Address:");
-				message7 = (String) in.readObject();
-
-				menu();
 			}
 
 			in.close();

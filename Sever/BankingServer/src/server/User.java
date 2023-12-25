@@ -11,6 +11,14 @@ public class User {
 		address=a;
 		PPS=pp;
 		balance=b;
-	}
+	}//end of user
 	
-}
+	 public String getEmail() {
+	        return email;
+	    }
+
+	    public String getPassword() {
+	        return password;
+	    }
+	
+}//end of class user
