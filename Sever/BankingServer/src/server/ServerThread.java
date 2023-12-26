@@ -1,8 +1,6 @@
 package server;
 
-import server.userData;
 import java.net.Socket;
-import java.util.List;
 import java.io.*;
 
 public class ServerThread extends Thread {
@@ -20,10 +18,11 @@ public class ServerThread extends Thread {
 	String message7;
 	userData userListData;
 
-	public ServerThread(Socket s) {
-		myConnection = s;
-		userListData = userListData;
+	public ServerThread(Socket s, userData userListData) {
+	    myConnection = s;
+	    this.userListData = userListData;
 	}
+
 
 	public void run() {
 		try {
@@ -53,7 +52,25 @@ public class ServerThread extends Thread {
 
 			else if (message.equalsIgnoreCase("2")) {// When the user registers they will be brought straigt to the menu
 			}
+			sendMessage("Welcome to registration");
+		    sendMessage("Please enter Name:");
+		    message1 = (String) in.readObject();
+		    sendMessage("Please enter Email:");
+		    message2 = (String) in.readObject();
+		    sendMessage("Please enter Password:");
+		    message3 = (String) in.readObject();
+		    sendMessage("Please enter Address:");
+		    message4 = (String) in.readObject();
+		    sendMessage("Please enter PPS NO.:");
+		    message5 = (String) in.readObject();
+		    sendMessage("Please enter Balance:");
+		    message6 = (String) in.readObject();
 
+		    if (userListData.registerUser(message1, message2, message3, message4, message5, message6)) {
+		        sendMessage("Registration successful. You can now log in.");
+		    } else {
+		        sendMessage("Registration failed. Email or PPS already exists. Please try again.");
+		    }
 			in.close();
 			out.close();
 		} catch (ClassNotFoundException classnot) {

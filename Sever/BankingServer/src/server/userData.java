@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
@@ -20,8 +19,8 @@ public class userData {
 		loadUserDataFromFile();
 	}// end os userdata
 
-	public synchronized boolean registorUser(String name, String email, String email1, String password, String address,
-			String PPS, String password1, String balance) {
+	public synchronized boolean registerUser(String name, String email, String password, String address,
+			String PPS, String balance) {
 		for (User user : newDatas) {
 			if (user.getEmail().equals(email)) {
 				return false; // Registration failed, email already exists

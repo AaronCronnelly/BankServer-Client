@@ -19,7 +19,7 @@ public class Provider {
 				System.out.println("Waiting for connection");
 
 				Socket connection = providerSocket.accept();
-				ServerThread T1 = new ServerThread(connection);
+				ServerThread T1 = new ServerThread(connection, myListData);
 				T1.start();
 			}
 
