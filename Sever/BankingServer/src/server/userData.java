@@ -16,64 +16,72 @@ public class userData {
 	private LinkedList<User> newDatas;
 
 	public userData() {
+		newDatas = new LinkedList<>();
+		loadUserDataFromFile();
+	}// end os userdata
+
+	public synchronized boolean registorUser(String name, String email, String email1, String password, String address,
+			String PPS, String password1, String balance) {
+		for (User user : newDatas) {
+			if (user.getEmail().equals(email)) {
+				return false; // Registration failed, email already exists
+			}
+		}
+
+		// Create a new user and add it to the list
+		User newUser = new User(name, email, password, address, PPS, balance);
+		newDatas.add(newUser);
+
+		// Save the new user information to the file
+		saveUserDataToFile(newUser);
+
+		return true; // Registration successful
+	}// end of registorUser
+
+	public synchronized boolean logIn(String email, String password) {
+		for (User user : newDatas) {
+			if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+				return true; // Return true if login succeeds
+			}
+		}
+		return false; // Return false if login fails
+	}// end of logIn
+
+	private void loadUserDataFromFile() {
 		String line;
 		User tempUser;
-		String temp[] = new String[7];
-		newDatas = new LinkedList<User>();
+		String temp[] = new String[6]; // Assuming 6 fields, adjust as needed
 
-		try {
-			FileReader fReader = new FileReader("UserData.txt");
-			BufferedReader bReader = new BufferedReader(fReader);
+		try (FileReader fReader = new FileReader("UserData.txt");
+				BufferedReader bReader = new BufferedReader(fReader)) {
 
 			while ((line = bReader.readLine()) != null) {
 				StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
 
-				for (int i = 0; i < 7; i++) {
+				for (int i = 0; i < temp.length; i++) {
 					temp[i] = stringTokenizer.nextToken();
 				}
 				tempUser = new User(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5]);
 				newDatas.add(tempUser);
-
 			}
 
 		} catch (FileNotFoundException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}// end of loadUserDataFromFile
 
-	}// end os userdata
-
-	public synchronized void registorUser(String name,String email,String email1,String password,String address,String PPS,String password1,String balance)
-	{
-		User tempUser=new User(name, address, password, password1, PPS, balance);
-		String lineString;
-		newDatas.add(tempUser);
-		
-		try {
-			FileWriter frFileWriter=new FileWriter("UserData.txt",true);
-			BufferedWriter bufferedWriter=new BufferedWriter(frFileWriter);
-			lineString="Name: "+name+", Password: "+password+", PPS No.: "+PPS+", Email: "+email+", Address: "+address+", Balance: "+balance;
+	private void saveUserDataToFile(User user) {
+		try (FileWriter frFileWriter = new FileWriter("UserData.txt", true);
+				BufferedWriter bufferedWriter = new BufferedWriter(frFileWriter)) {
+			String lineString = user.getName() + "," + user.getEmail() + "," + user.getPassword() + ","
+					+ user.getAddress() + "," + user.getPPS() + "," + user.getBalance();
 			bufferedWriter.write(lineString);
 			bufferedWriter.newLine();
-			bufferedWriter.close();
 		} catch (IOException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
-		
-		
-	}// end of registorUser
+	}// end of saveUserDataToFile
 
-	public synchronized boolean logIn(String email,String password)
-	{
-		for(User user:newDatas) {
-			if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-				return true; // Return true if login succeeds
-	        }
-	    }
-	    return false; // Return false if login fails
-	}//end of logIn
-	
 }// end of class
