@@ -8,7 +8,7 @@ public class Provider {
 
 	public static void main(String args[]) {
 		ServerSocket providerSocket;
-		userData myListData=new userData();
+		UserData myListData=new UserData();
 		try {
 			providerSocket = new ServerSocket(2004, 10);
 			

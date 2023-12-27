@@ -13,7 +13,6 @@ public class Requester {
 	Scanner input;
 
 	Requester() {
-
 		input = new Scanner(System.in);
 	}
 
@@ -34,7 +33,6 @@ public class Requester {
 		sendMessage(response);
 
 		menu();
-
 	}
 
 	void handleRegistration() throws ClassNotFoundException, IOException {
@@ -98,16 +96,44 @@ public class Requester {
 		System.out.println(message);
 		response = input.next();
 		sendMessage(response);
+		if (response.equalsIgnoreCase("2")) {
+			displayUser();
+		}
 
 		message = (String) in.readObject();
 		System.err.println(message);
+	}
 
+	void displayUser() {
+		try {
+			// Assume the server sends a signal before sending user data
+			String signal = (String) in.readObject();
+
+			// Check if the signal indicates user data is coming
+			if (signal.equals("UserData")) {
+				while (true) {
+					// Read user data from the server
+					message = (String) in.readObject();
+
+					// Check if it's the end of user data
+					if (message.equals("EndUserData")) {
+						break;
+					}
+
+					// Display user data
+					System.out.println(message);
+				}
+			} else {
+				System.out.println("No user data available.");
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	void run() {
 		try {
 			// 1. creating a socket to connect to the server
-
 			requestSocket = new Socket("127.0.0.1", 2004);
 			System.out.println("Connected to localhost in port 2004");
 			// 2. get Input and Output streams
@@ -126,9 +152,7 @@ public class Requester {
 
 					if (response.equalsIgnoreCase("1")) {
 						handleSignIn();
-					}
-
-					else if (response.equalsIgnoreCase("2")) {
+					} else if (response.equalsIgnoreCase("2")) {
 						handleRegistration();
 					}
 
@@ -137,13 +161,9 @@ public class Requester {
 					response = input.next();
 					sendMessage(response);
 				} while (response.equalsIgnoreCase("1"));
-			}
-
-			catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-
 		} catch (UnknownHostException unknownHost) {
 			System.err.println("You are trying to connect to an unknown host!");
 		} catch (IOException ioException) {
@@ -158,7 +178,7 @@ public class Requester {
 				ioException.printStackTrace();
 			}
 		}
-	}
+	}// end of run
 
 	void sendMessage(String msg) {
 		try {

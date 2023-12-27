@@ -1,1 +1,2 @@
-john,john@email.com,testing,johndoe,321535J,100
+john,john@email.com,testing,johndoe,321535J,110.0
+jane,jane@email.com,testing,janedoe,5143662J,150

@@ -1,6 +1,8 @@
 package server;
 
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.LinkedList;
 import java.io.*;
 
 public class ServerThread extends Thread {
@@ -16,10 +18,10 @@ public class ServerThread extends Thread {
 	String message5;
 	String message6;
 	String message7;
-	userData userListData;
+	UserData userListData;
 	String currentUserEmail; // Add this variable to store the email of the current user
 
-	public ServerThread(Socket s, userData userListData) {
+	public ServerThread(Socket s, UserData userListData) {
 		myConnection = s;
 		this.userListData = userListData;
 	}
@@ -44,8 +46,8 @@ public class ServerThread extends Thread {
 				message2 = (String) in.readObject();
 
 				if (userListData.logIn(currentUserEmail.trim(), message2.trim())) {
-				    sendMessage("Login successful. Accessing menu...");
-				    menu();
+					sendMessage("Login successful. Accessing menu...");
+					menu();
 				} else {
 					sendMessage("Login failed. Please try again.");
 				}
@@ -84,17 +86,19 @@ public class ServerThread extends Thread {
 
 	void sendMessage(String msg) {
 		try {
-	        if (!myConnection.isClosed()) { // Check if the socket is still open
-	            out.writeObject(msg);
-	            out.flush();
-	            System.out.println("server>" + msg);
-	        } else {
-	            System.out.println("Debug: Socket is closed. Message not sent: " + msg);
-	        }
-	    } catch (IOException ioException) {
-	        ioException.printStackTrace();
-	    }
-	}//end of sendMessage
+			if (!myConnection.isClosed()) {
+				out.writeObject(msg);
+				out.flush();
+				System.out.println("server>" + msg);
+			} else {
+				System.out.println("Debug: Socket is closed. Message not sent: " + msg);
+			}
+		} catch (SocketException e) {
+			System.out.println("Debug: Socket closed unexpectedly. Message not sent: " + msg);
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+		}
+	}// end of sendMessage
 
 	/****** METHODS ******/
 	/* Authentachation */
@@ -141,7 +145,7 @@ public class ServerThread extends Thread {
 			e.printStackTrace();
 		}
 
-	}
+	}// end of menu
 
 	/* Lodgment */
 //Allows the user to lodge money into the account
@@ -151,8 +155,7 @@ public class ServerThread extends Thread {
 			String amountStr = (String) in.readObject();
 
 			// Retrieve the current user from userData
-			User currentUser = userListData.findCurrentUser(currentUserEmail); // Assuming you have a method to find the current
-																// user
+			User currentUser = userListData.findCurrentUser(currentUserEmail);
 			if (currentUser != null) {
 				// Convert the user's balance to a numeric type
 				double currentBalance = Double.parseDouble(currentUser.getBalance());
@@ -166,7 +169,7 @@ public class ServerThread extends Thread {
 
 				sendMessage("Lodgment successful. Updated balance: " + currentUser.getBalance());
 			} else {
-				sendMessage("Error: Current user not found.");
+				sendMessage("Error: Current user not found during lodgment.");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -174,10 +177,32 @@ public class ServerThread extends Thread {
 	}// end fo lodgment
 
 	/* Retrieve all registered users */
-//Allow the suer to see all registered users
+//Allow the user to see all registered users
 	public void retrive() {
-		sendMessage("In retrive");
-	}
+		try {
+			sendMessage("Retrieving all registered users...");
+
+			// Get all registered users from UserData
+			LinkedList<User> allUsers = userListData.getAllUsers();
+
+			// Check if there are any users
+			if (allUsers.isEmpty()) {
+				sendMessage("No registered users found.");
+			} else {
+				// Iterate through the list of users and send their details to the client
+				for (User user : allUsers) {
+					String userDetails = "Name: " + user.getName() + ", Email: " + user.getEmail() + ", PPS: "
+							+ user.getPPS();
+					sendMessage(userDetails);
+				}
+			}
+
+			// Signal the end of user retrieval
+			sendMessage("EndRetrieve");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}// end of retrive
 
 	/* Transfer money */
 //Allow user to transfare money 
