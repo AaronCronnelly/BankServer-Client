@@ -9,18 +9,17 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-import javax.xml.crypto.Data;
-
 public class userData {
 	private LinkedList<User> newDatas;
 
 	public userData() {
 		newDatas = new LinkedList<>();
 		loadUserDataFromFile();
-	}// end os userdata
+	} // end of UserData
 
-	public synchronized boolean registerUser(String name, String email, String password, String address,
-			String PPS, String balance) {
+	// Registration method
+	public synchronized boolean registerUser(String name, String email, String password, String address, String PPS,
+			String balance) {
 		for (User user : newDatas) {
 			if (user.getEmail().equals(email)) {
 				return false; // Registration failed, email already exists
@@ -31,12 +30,13 @@ public class userData {
 		User newUser = new User(name, email, password, address, PPS, balance);
 		newDatas.add(newUser);
 
-		// Save the new user information to the file
-		saveUserDataToFile(newUser);
+		// Save all user information to the file
+		saveUserDataToFile();
 
 		return true; // Registration successful
-	}// end of registorUser
+	} // end of registerUser
 
+	// Login method
 	public synchronized boolean logIn(String email, String password) {
 		for (User user : newDatas) {
 			if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
@@ -44,8 +44,9 @@ public class userData {
 			}
 		}
 		return false; // Return false if login fails
-	}// end of logIn
+	} // end of logIn
 
+	// Load user data from file into memory
 	private void loadUserDataFromFile() {
 		String line;
 		User tempUser;
@@ -56,7 +57,6 @@ public class userData {
 
 			while ((line = bReader.readLine()) != null) {
 				StringTokenizer stringTokenizer = new StringTokenizer(line, ",");
-
 				for (int i = 0; i < temp.length; i++) {
 					temp[i] = stringTokenizer.nextToken();
 				}
@@ -69,18 +69,42 @@ public class userData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}// end of loadUserDataFromFile
+	} // end of loadUserDataFromFile
 
-	private void saveUserDataToFile(User user) {
-		try (FileWriter frFileWriter = new FileWriter("UserData.txt", true);
+	// Save all user data to file
+	private void saveUserDataToFile() {
+		try (FileWriter frFileWriter = new FileWriter("UserData.txt");
 				BufferedWriter bufferedWriter = new BufferedWriter(frFileWriter)) {
-			String lineString = user.getName() + "," + user.getEmail() + "," + user.getPassword() + ","
-					+ user.getAddress() + "," + user.getPPS() + "," + user.getBalance();
-			bufferedWriter.write(lineString);
-			bufferedWriter.newLine();
+
+			for (User user : newDatas) {
+				String lineString = user.getName() + "," + user.getEmail() + "," + user.getPassword() + ","
+						+ user.getAddress() + "," + user.getPPS() + "," + user.getBalance();
+				bufferedWriter.write(lineString);
+				bufferedWriter.newLine();
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}// end of saveUserDataToFile
+	} // end of saveUserDataToFile
+
+	// Update user balance
+	public void updateBalance(String email, String newBalance) {
+		User currentUser = findCurrentUser(email);
+		if (currentUser != null) {
+			currentUser.setBalance(newBalance);
+			saveUserDataToFile();
+		}
+	} // end of updateBalance
+
+	// Find user by email
+	public User findCurrentUser(String email) {
+		for (User user : newDatas) {
+			if (user.getEmail().equals(email)) {
+				return user;
+			}
+		}
+		return null; // User not found
+	} // end of findCurrentUser
 
 }// end of class

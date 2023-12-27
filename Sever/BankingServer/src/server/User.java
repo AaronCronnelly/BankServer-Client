@@ -19,20 +19,28 @@ public class User {
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public String getPPS() {
 		return PPS;
 	}
-	
+
 	public String getBalance() {
 		return balance;
+	}
+
+	public void setBalance(String newBalance) {
+		balance = newBalance;
+	}
+	
+	public void updateBalance(String newBalance) {
+	    this.balance = newBalance;
 	}
 }// end of class user

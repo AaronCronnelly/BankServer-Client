@@ -17,12 +17,12 @@ public class ServerThread extends Thread {
 	String message6;
 	String message7;
 	userData userListData;
+	String currentUserEmail; // Add this variable to store the email of the current user
 
 	public ServerThread(Socket s, userData userListData) {
-	    myConnection = s;
-	    this.userListData = userListData;
+		myConnection = s;
+		this.userListData = userListData;
 	}
-
 
 	public void run() {
 		try {
@@ -38,13 +38,14 @@ public class ServerThread extends Thread {
 			if (message.equalsIgnoreCase("1")) {
 				sendMessage("Welcome to sign in");
 				sendMessage("Enter Email: ");
-				message1 = (String) in.readObject();
+//				message1 = (String) in.readObject();
+				currentUserEmail = (String) in.readObject(); // Store the email for the current session
 				sendMessage("Enter Password: ");
 				message2 = (String) in.readObject();
 
-				if (userListData.logIn(message1, message2)) {
-					sendMessage("Login successful. Accessing menu...");
-					menu();
+				if (userListData.logIn(currentUserEmail.trim(), message2.trim())) {
+				    sendMessage("Login successful. Accessing menu...");
+				    menu();
 				} else {
 					sendMessage("Login failed. Please try again.");
 				}
@@ -53,24 +54,24 @@ public class ServerThread extends Thread {
 			else if (message.equalsIgnoreCase("2")) {// When the user registers they will be brought straigt to the menu
 			}
 			sendMessage("Welcome to registration");
-		    sendMessage("Please enter Name:");
-		    message1 = (String) in.readObject();
-		    sendMessage("Please enter Email:");
-		    message2 = (String) in.readObject();
-		    sendMessage("Please enter Password:");
-		    message3 = (String) in.readObject();
-		    sendMessage("Please enter Address:");
-		    message4 = (String) in.readObject();
-		    sendMessage("Please enter PPS NO.:");
-		    message5 = (String) in.readObject();
-		    sendMessage("Please enter Balance:");
-		    message6 = (String) in.readObject();
+			sendMessage("Please enter Name:");
+			message1 = (String) in.readObject();
+			sendMessage("Please enter Email:");
+			message2 = (String) in.readObject();
+			sendMessage("Please enter Password:");
+			message3 = (String) in.readObject();
+			sendMessage("Please enter Address:");
+			message4 = (String) in.readObject();
+			sendMessage("Please enter PPS NO.:");
+			message5 = (String) in.readObject();
+			sendMessage("Please enter Balance:");
+			message6 = (String) in.readObject();
 
-		    if (userListData.registerUser(message1, message2, message3, message4, message5, message6)) {
-		        sendMessage("Registration successful. You can now log in.");
-		    } else {
-		        sendMessage("Registration failed. Email or PPS already exists. Please try again.");
-		    }
+			if (userListData.registerUser(message1, message2, message3, message4, message5, message6)) {
+				sendMessage("Registration successful. You can now log in.");
+			} else {
+				sendMessage("Registration failed. Email or PPS already exists. Please try again.");
+			}
 			in.close();
 			out.close();
 		} catch (ClassNotFoundException classnot) {
@@ -83,13 +84,17 @@ public class ServerThread extends Thread {
 
 	void sendMessage(String msg) {
 		try {
-			out.writeObject(msg);
-			out.flush();
-			System.out.println("server>" + msg);
-		} catch (IOException ioException) {
-			ioException.printStackTrace();
-		}
-	}
+	        if (!myConnection.isClosed()) { // Check if the socket is still open
+	            out.writeObject(msg);
+	            out.flush();
+	            System.out.println("server>" + msg);
+	        } else {
+	            System.out.println("Debug: Socket is closed. Message not sent: " + msg);
+	        }
+	    } catch (IOException ioException) {
+	        ioException.printStackTrace();
+	    }
+	}//end of sendMessage
 
 	/****** METHODS ******/
 	/* Authentachation */
@@ -141,8 +146,32 @@ public class ServerThread extends Thread {
 	/* Lodgment */
 //Allows the user to lodge money into the account
 	public void lodgment() throws ClassNotFoundException {
-		sendMessage("In lodgment");
-	}
+		try {
+			sendMessage("Enter the amount to lodge:");
+			String amountStr = (String) in.readObject();
+
+			// Retrieve the current user from userData
+			User currentUser = userListData.findCurrentUser(currentUserEmail); // Assuming you have a method to find the current
+																// user
+			if (currentUser != null) {
+				// Convert the user's balance to a numeric type
+				double currentBalance = Double.parseDouble(currentUser.getBalance());
+				double lodgmentAmount = Double.parseDouble(amountStr);
+
+				// Perform the lodgment
+				currentBalance += lodgmentAmount;
+
+				// Convert the updated balance back to String and update the user's balance
+				currentUser.updateBalance(String.valueOf(currentBalance));
+
+				sendMessage("Lodgment successful. Updated balance: " + currentUser.getBalance());
+			} else {
+				sendMessage("Error: Current user not found.");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}// end fo lodgment
 
 	/* Retrieve all registered users */
 //Allow the suer to see all registered users
