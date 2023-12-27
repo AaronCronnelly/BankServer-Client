@@ -105,30 +105,22 @@ public class Requester {
 	}
 
 	void displayUser() {
-		try {
-			// Assume the server sends a signal before sending user data
-			String signal = (String) in.readObject();
+		 try {
+		        while (true) {
+		            // Read user data from the server
+		            message = (String) in.readObject();
 
-			// Check if the signal indicates user data is coming
-			if (signal.equals("UserData")) {
-				while (true) {
-					// Read user data from the server
-					message = (String) in.readObject();
+		            // Check if it's the end of user retrieval
+		            if (message.equals("EndRetrieve")) {
+		                break;
+		            }
 
-					// Check if it's the end of user data
-					if (message.equals("EndUserData")) {
-						break;
-					}
-
-					// Display user data
-					System.out.println(message);
-				}
-			} else {
-				System.out.println("No user data available.");
-			}
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		            // Display user data
+		            System.out.println(message);
+		        }
+		    } catch (IOException | ClassNotFoundException e) {
+		        e.printStackTrace();
+		    }
 	}
 
 	void run() {
