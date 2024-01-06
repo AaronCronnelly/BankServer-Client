@@ -1,2 +1,4 @@
 john,john@email.com,testing,johndoe,321535J,110.0
 jane,jane@email.com,testing,janedoe,5143662J,150
+AaronCronnely,Aaron@gmail.com,testing,park,5125215b,1000
+Jill,Jill@gmail.com,Jill123,Oughterard,4115164L,3000
